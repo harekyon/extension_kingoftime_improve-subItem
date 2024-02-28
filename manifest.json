@@ -1,0 +1,13 @@
+{
+  "name": "Sample",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "description": "Sample Chrome Extension",
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": ["https://s2.ta.kingoftime.jp/admin/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
