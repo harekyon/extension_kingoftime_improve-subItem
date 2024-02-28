@@ -176,6 +176,15 @@ presetDataList.map((u, idx) => {
   cachePresetDecideBtn.style.fontSize = "12px";
   cachePresetDecideBtn.onclick = function () {
     decideFunction(idx + 1);
+    console.log(document.getElementById(`preset${idx + 1}Job`));
+    let resultJob = "";
+    Array.from(document.getElementById(`preset${idx + 1}Job`).children).map((p) => {
+      if (p.selected === true) {
+        resultJob = p.innerText;
+      }
+    });
+    let resultAnyName = document.getElementById(`preset${idx + 1}AnyName`).value;
+    reWriteResultUnitTitle(idx + 1, resultJob, resultAnyName);
   };
   cachePreset.appendChild(cachePresetDecideBtn);
   presetArea.appendChild(cachePreset);
@@ -203,6 +212,11 @@ function addPresetButton() {
     }
   });
 }
+function reWriteResultUnitTitle(no, jobName, anyname) {
+  console.log("run!");
+  const reWriteResult = document.getElementById(`presetResultUnitTitle${no}`);
+  reWriteResult.innerText = `Preset${no}: ${jobName}, 登録名${anyname}`;
+}
 chrome.storage.sync.get(null, (data) => {
   dataPresetList.push(data.preset1[0]);
   dataPresetList.push(data.preset2[0]);
@@ -219,6 +233,7 @@ chrome.storage.sync.get(null, (data) => {
     const presetResultUnitTitle = document.createElement("p");
     presetResultUnitTitle.style.fontSize = "10px";
     presetResultUnitTitle.innerText = `Preset${d.no}: ${d.jobName}, 登録名${d.anyname}`;
+    presetResultUnitTitle.id = `presetResultUnitTitle${d.no}`;
     presetResultUnitWrap.appendChild(presetResultUnitTitle);
     presetArea.appendChild(presetResultUnitWrap);
   });
@@ -252,15 +267,35 @@ function decideFunction(num) {
   formatPreset(num);
   chrome.storage.sync.set(presetResult);
 }
-
 //================================================
+//プリセット入力エリアに保存されているデータを表示
+function applyPresetInputField() {
+  console.log(presetDataList);
+  chrome.storage.sync.get(null, (data) => {
+    // console.log(data);
+    Object.keys(data).map((d, idx) => {
+      // console.log(idx);
+      // console.log(data[d][0]?.value);
+      if (data[d][0]?.value !== undefined) {
+        document.getElementById(`preset${data[d][0].no}Job`).value = data[d][0]?.value;
+        document.getElementById(`preset${data[d][0].no}AnyName`).value =
+          data[d][0]?.anyname;
+      }
+
+      // preset1AnyName;
+      // const cachePresetElemet = document.getElementById(`preset${p[0].no}Job`);
+      // cachePresetElemet.p
+    });
+  });
+}
+applyPresetInputField();
 
 document.body.appendChild(presetArea);
 
 //================================================
 
 // fetch(
-//   "https://api.kingtime.jp/v1.0/tokens/ef6640f0ba1f42e49964414c6d75be44/available"
+//   "https://api.kingtime.jp/v1.0/tokens/XXXXXXX/available"
 // ).then((res) => {
 //   console.log(res);
 // });
