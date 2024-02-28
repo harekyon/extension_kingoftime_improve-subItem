@@ -1,6 +1,6 @@
 //================================================
 // 補助項目編集の仕様(拡張機能ではなく補助項目画面内の仕様)
-// 1. 確定されてない補助項目には「supplemental_working_record_setting_」+ 数字のようなIDがつく
+// 1. 確定されてない補助項目には [supplemental_working_record_setting_] + [数字]でIDがつく
 // 2. 補助項目が確定された後のIDは語尾に90000と乱数がつく
 //================================================
 
@@ -13,17 +13,6 @@ const addSectionButton = document.getElementById("supplemental_working_record_ad
 const selectInput1 = document.getElementById("supplemental_working_record_setting_1");
 //プリセットのリスト
 let dataPresetList = [];
-
-// ボタンの設定
-addButton.textContent = "ボタン";
-addButton.style.position = "fixed";
-addButton.style.bottom = "30px";
-addButton.style.zIndex = "100";
-addButton.onclick = function () {
-  //   alert("クリックされたね！");
-  // console.log(document.getElementById("supplemental_working_record_setting_1"));
-};
-document.body.appendChild(addButton);
 
 // プリセット画面追加
 const presetArea = document.createElement("div");
@@ -74,20 +63,14 @@ function checkProjectId() {
   Array.from(document.getElementsByTagName("select")).map((s) => {
     if (s.id.includes("supplemental_working_record_setting_900")) {
       getAvailablePullDownProject.push(s);
-      // console.log(s.id);
     }
   });
 }
 //ボタンDOMとスタイルを作る
 function createPresetButton(num) {
   //有効なプロジェクトプルダウン
-  // console.log(getAvailablePullDownProject);
-  // console.log(dataPresetList);
   let buttonWrap = document.createElement("div");
-  // let buttonUnitList = [];
-  // console.log(dataPresetList);
   dataPresetList.map((p) => {
-    // console.log(p);
     const buttonUnit = document.createElement("button");
     buttonUnit.innerText = p.anyname;
     buttonUnit.type = "button";
@@ -101,7 +84,6 @@ function createPresetButton(num) {
       getAvailablePullDownProject[num].value = p.value;
     };
     buttonWrap.appendChild(buttonUnit);
-    // buttonUnitList.push();
   });
   return buttonWrap;
 }
@@ -132,21 +114,9 @@ addSectionButton.onclick = function () {
   addPresetButton();
   console.log("run!");
 }; //補助項目追加ボタンを押した時に有効なselectタグをチェックする関数を実行
-
-// console.log(getAvailablePullDownProject);
-// console.log(document.getElementsByTagName("select"));
-// let getProject = [];
-// Array.from(document.getElementById("supplemental_working_record_setting_1").children).map(
-//   (a, idx) => {
-//     getProject.push(a.innerText);
-//   }
-// );
-
 //================================================
 //プリセットの設定
 const presetDataList = [];
-// console.log(getAvailablePullDownProject);
-
 for (let i = 1; i <= 5; i++) {
   //
   presetDataList.push({
@@ -164,14 +134,10 @@ for (let i = 1; i <= 5; i++) {
   });
 }
 
-//
-
 //================================================
 //プリセット設定完了後
 //================================================
 //プリセットを生成
-// document
-//   .getElementById("supplemental_working_record_setting_90000002918481")
 presetDataList.map((u, idx) => {
   let cachePreset = u.presetSecEleType.dom;
   cachePreset.style.marginBottom = "4px";
@@ -229,19 +195,12 @@ presetArea.appendChild(showPresetTitle);
 //プルダウンの下にボタンを配置
 let availableButtonCounter = 0;
 function addPresetButton() {
-  // console.log(getAvailablePullDownProject);
   getAvailablePullDownProject.map((g, idx) => {
-    // console.log("run!");
-    // console.log(createPresetButton());
-    // if (getAvailablePullDownProject.length - 1 <= idx) {
-    // console.log(getAvailablePullDownProject.length);
     if (availableButtonCounter <= idx) {
       console.log(availableButtonCounter);
       g.after(createPresetButton(availableButtonCounter));
       ++availableButtonCounter;
     }
-
-    // console.log(availableButtonCounter);
   });
 }
 chrome.storage.sync.get(null, (data) => {
@@ -263,40 +222,20 @@ chrome.storage.sync.get(null, (data) => {
     presetResultUnitWrap.appendChild(presetResultUnitTitle);
     presetArea.appendChild(presetResultUnitWrap);
   });
-  // console.log(dataPresetList);
-
   addPresetButton();
-
-  //===========================
-  // const presetListTitle = document.createElement("div");
 });
 //================================================
 
 //================================================
-function reflashResultPresets(num) {}
 function formatPreset(num) {
   const presetJob = document.getElementById(`preset${num}Job`);
   const presetAnyName = document.getElementById(`preset${num}AnyName`);
-  // console.log(presetJob);
   let jobText;
   Array.from(presetJob.children).map((p) => {
     if (p.selected) {
       jobText = p.innerText;
     }
   });
-  //========
-  //以下は実際にジョブをApplyする処理
-  // const presetApplyDom = document.getElementById(
-  //   `supplemental_working_record_setting_${num}`
-  // );
-  // Array.from(presetApplyDom.children).map((searchValue) => {
-  //   console.log();
-  //   if (presetJob.value === searchValue.value) {
-  //     console.log(searchValue);
-  //     searchValue.selected = true;
-  //   }
-  // });
-  //========
   presetResult = {
     [`preset${num}`]: [
       {
@@ -310,20 +249,8 @@ function formatPreset(num) {
   };
 }
 function decideFunction(num) {
-  // console.log(`${num}がおされたよ！`);
   formatPreset(num);
-
-  // let presetResult;
-  // formatPreset(num);
-
-  // console.log(presetResult);
   chrome.storage.sync.set(presetResult);
-  chrome.storage.sync.get(null, (data) => {
-    // console.log(data);
-  });
-  // chrome.storage.sync.set({
-  //   preset2: [{ no: 1, name: jobZentai000.innerHTML, color: "#ffffff" }],
-  // });
 }
 
 //================================================
@@ -331,63 +258,9 @@ function decideFunction(num) {
 document.body.appendChild(presetArea);
 
 //================================================
-//個別のプリセットを生成
-// const preset1SectionTitle = [];
-// // preset1SectionTitle.push(document.createElement("h4"));
-// // preset1SectionTitle.innerText = "案件プリセット1";
-// // preset1SectionTitle.style.marginBottom = "5px";
-// presetArea.appendChild(preset1SectionTitle);
-// //section1
-// const preset1Section = document.createElement("div");
-// //ジョブ選択1
-// const preset1Job = document
-//   .getElementById("supplemental_working_record_setting_1")
-//   .cloneNode(true);
-// preset1Job.id = "preset1Job";
-// preset1Job.name = "preset1Job";
-// const preset1Title = document.createElement("input");
-// preset1Title.placeholder = "任意のタイトル";
-// const preset1DecideButton = document.createElement("button");
-// preset1DecideButton.innerHTML = "決定！";
 
-// preset1Section.appendChild(preset1Job);
-// preset1Section.appendChild(preset1Title);
-// preset1Section.appendChild(preset1DecideButton);
-// presetArea.appendChild(preset1Section);
-//================================================
-
-// 時間入力欄を表示するように
-// document.getElementById("time_span_element_1").style.display = "table-cell";
-
-// const jobZentai000 = document.getElementById("supplemental_working_record_setting_1")
-//   .children[1];
-// chrome.storage.sync.set({
-//   preset1: [{ no: 0, name: jobZentai000.innerHTML, color: "#ffffff" }],
+// fetch(
+//   "https://api.kingtime.jp/v1.0/tokens/ef6640f0ba1f42e49964414c6d75be44/available"
+// ).then((res) => {
+//   console.log(res);
 // });
-// chrome.storage.sync.set({
-//   preset2: [{ no: 1, name: jobZentai000.innerHTML, color: "#ffffff" }],
-// });
-chrome.storage.sync.get(null, (data) => {
-  // console.log(data);
-});
-
-//test
-// console.log(getProject);
-// document.getElementById("supplemental_working_record_setting_1").selectedIndex = 6;
-// console.log();
-
-// function selectProject() {
-//   let selectProjectDom;
-//   getProject[0].selectedIndex = 7;
-// }
-// selectProject();
-
-// console.log(Array.from(getProject).);
-// console.log(document.getElementById("supplemental_working_record_setting_1").children);
-
-//項目追加ボタンを押した時の挙動
-// addSectionButton.onclick = function () {
-//   console.log("addSectionButton");
-// };
-
-// fetch("https://api.kingtime.jp/v1.0/tokens/XXXXXXXXXXXXXXXXXX");
