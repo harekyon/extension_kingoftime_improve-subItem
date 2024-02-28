@@ -11,6 +11,8 @@ console.log("poko extension !");
 const addButton = document.createElement("button");
 const addSectionButton = document.getElementById("supplemental_working_record_add");
 const selectInput1 = document.getElementById("supplemental_working_record_setting_1");
+//プリセットのリスト
+let dataPresetList = [];
 
 // ボタンの設定
 addButton.textContent = "ボタン";
@@ -19,7 +21,7 @@ addButton.style.bottom = "30px";
 addButton.style.zIndex = "100";
 addButton.onclick = function () {
   //   alert("クリックされたね！");
-  console.log(document.getElementById("supplemental_working_record_setting_1"));
+  // console.log(document.getElementById("supplemental_working_record_setting_1"));
 };
 document.body.appendChild(addButton);
 
@@ -62,8 +64,8 @@ presetEditButton.style.cssText = `
 `;
 presetArea.appendChild(presetEditButton);
 
-//getAvailableProject:有効なselectタグを格納する変数
-let getAvailableProject = [];
+//getAvailablePullDownProject:有効なselectタグを格納する変数
+let getAvailablePullDownProject = [];
 //emptyNumber:項目追加した時に[内容]列が空白になるので、emptyNumberを使って空白の行数を特定する
 let emptyNumber = 1;
 //有効なselectタグを取得する関数
@@ -71,10 +73,37 @@ function checkProjectId() {
   //チェック時に前回のデータを削除
   Array.from(document.getElementsByTagName("select")).map((s) => {
     if (s.id.includes("supplemental_working_record_setting_900")) {
-      getAvailableProject.push(s);
-      console.log(s.id);
+      getAvailablePullDownProject.push(s);
+      // console.log(s.id);
     }
   });
+}
+//ボタンDOMとスタイルを作る
+function createPresetButton(num) {
+  //有効なプロジェクトプルダウン
+  // console.log(getAvailablePullDownProject);
+  // console.log(dataPresetList);
+  let buttonWrap = document.createElement("div");
+  // let buttonUnitList = [];
+  // console.log(dataPresetList);
+  dataPresetList.map((p) => {
+    // console.log(p);
+    const buttonUnit = document.createElement("button");
+    buttonUnit.innerText = p.anyname;
+    buttonUnit.type = "button";
+    buttonUnit.style.cssText = `
+        font-size:10px;
+      `;
+    buttonUnit.onclick = function () {
+      console.log("run!");
+      console.log(p.value);
+      console.log(getAvailablePullDownProject[num].value);
+      getAvailablePullDownProject[num].value = p.value;
+    };
+    buttonWrap.appendChild(buttonUnit);
+    // buttonUnitList.push();
+  });
+  return buttonWrap;
 }
 function checkEmptyProjectId() {
   Array.from(document.getElementsByTagName("select")).map((s) => {
@@ -82,25 +111,29 @@ function checkEmptyProjectId() {
       if (
         s.id.match(new RegExp(`^supplemental_working_record_setting_${emptyNumber}$`))
       ) {
-        console.log(s.id);
-        getAvailableProject.push(s);
+        // console.log(s.id);
+        getAvailablePullDownProject.push(s);
         document.getElementById(`empty_element_${emptyNumber}`).style.display = "none";
         document.getElementById(`time_span_element_${emptyNumber}`).style.display =
           "table-cell";
+        createPresetButton(getAvailablePullDownProject.length);
         ++emptyNumber;
       }
     }
   });
 }
+
 //ページ訪問時に有効なselectタグをチェックする関数を一度実行
 checkProjectId();
 checkEmptyProjectId();
 
-document.getElementById("supplemental_working_record_add").onclick = function () {
+addSectionButton.onclick = function () {
   checkEmptyProjectId();
+  addPresetButton();
+  console.log("run!");
 }; //補助項目追加ボタンを押した時に有効なselectタグをチェックする関数を実行
 
-// console.log(getAvailableProject);
+// console.log(getAvailablePullDownProject);
 // console.log(document.getElementsByTagName("select"));
 // let getProject = [];
 // Array.from(document.getElementById("supplemental_working_record_setting_1").children).map(
@@ -112,7 +145,7 @@ document.getElementById("supplemental_working_record_add").onclick = function ()
 //================================================
 //プリセットの設定
 const presetDataList = [];
-console.log(getAvailableProject);
+// console.log(getAvailablePullDownProject);
 
 for (let i = 1; i <= 5; i++) {
   //
@@ -120,7 +153,7 @@ for (let i = 1; i <= 5; i++) {
     presetSecTitle: { dom: document.createElement("h4"), text: `Preset${i}` },
     presetSecEleType: { dom: document.createElement("div") },
     presetUnitJob: {
-      dom: getAvailableProject[0].cloneNode(true),
+      dom: getAvailablePullDownProject[0].cloneNode(true),
       id: `preset${i}Job`,
       name: `preset${i}Job`,
     },
@@ -130,53 +163,57 @@ for (let i = 1; i <= 5; i++) {
     },
   });
 }
+
+//
+
+//================================================
 //プリセット設定完了後
-document
-  .getElementById("supplemental_working_record_setting_90000002918481")
-  //================================================
-  //プリセットを生成
-  .presetDataList.map((u, idx) => {
-    let cachePreset = u.presetSecEleType.dom;
-    cachePreset.style.marginBottom = "4px";
-    cachePreset.style.display = "flex";
-    cachePreset.style.justifyContent = "flex-start";
-    cachePreset.style.alignItems = "center";
-    cachePreset.style.flexDirection = "row";
-    cachePreset.style.columnGap = "3px";
-    //sectionTitle
-    let cachePresetTitle = u.presetSecTitle.dom;
-    cachePresetTitle.innerText = u.presetSecTitle.text;
-    cachePresetTitle.style.display = "inline-block";
-    cachePresetTitle.style.fontSize = "14px";
-    cachePresetTitle.style.fontWeight = "700";
-    cachePresetTitle.style.marginRight = "4px";
-    cachePreset.appendChild(cachePresetTitle);
+//================================================
+//プリセットを生成
+// document
+//   .getElementById("supplemental_working_record_setting_90000002918481")
+presetDataList.map((u, idx) => {
+  let cachePreset = u.presetSecEleType.dom;
+  cachePreset.style.marginBottom = "4px";
+  cachePreset.style.display = "flex";
+  cachePreset.style.justifyContent = "flex-start";
+  cachePreset.style.alignItems = "center";
+  cachePreset.style.flexDirection = "row";
+  cachePreset.style.columnGap = "3px";
+  //sectionTitle
+  let cachePresetTitle = u.presetSecTitle.dom;
+  cachePresetTitle.innerText = u.presetSecTitle.text;
+  cachePresetTitle.style.display = "inline-block";
+  cachePresetTitle.style.fontSize = "14px";
+  cachePresetTitle.style.fontWeight = "700";
+  cachePresetTitle.style.marginRight = "4px";
+  cachePreset.appendChild(cachePresetTitle);
 
-    let chachePresetJobList = u.presetUnitJob.dom;
-    chachePresetJobList.id = u.presetUnitJob.id;
-    chachePresetJobList.name = u.presetUnitJob.name;
-    chachePresetJobList.style.height = "20px";
-    chachePresetJobList.style.padding = "2px 32px 2px 5px";
-    chachePresetJobList.style.fontSize = "10px";
-    cachePreset.appendChild(chachePresetJobList);
+  let chachePresetJobList = u.presetUnitJob.dom;
+  chachePresetJobList.id = u.presetUnitJob.id;
+  chachePresetJobList.name = u.presetUnitJob.name;
+  chachePresetJobList.style.height = "20px";
+  chachePresetJobList.style.padding = "2px 32px 2px 5px";
+  chachePresetJobList.style.fontSize = "10px";
+  cachePreset.appendChild(chachePresetJobList);
 
-    let chachePresetAnyName = u.presetUnitAnyName.dom;
-    chachePresetAnyName.placeholder = `任意のタイトル${idx + 1}`;
-    chachePresetAnyName.style.height = "18px";
-    chachePresetAnyName.style.fontSize = "10px";
-    chachePresetAnyName.id = `preset${idx + 1}AnyName`;
-    cachePreset.appendChild(chachePresetAnyName);
+  let chachePresetAnyName = u.presetUnitAnyName.dom;
+  chachePresetAnyName.placeholder = `任意のタイトル${idx + 1}`;
+  chachePresetAnyName.style.height = "18px";
+  chachePresetAnyName.style.fontSize = "10px";
+  chachePresetAnyName.id = `preset${idx + 1}AnyName`;
+  cachePreset.appendChild(chachePresetAnyName);
 
-    const cachePresetDecideBtn = document.createElement("button");
-    cachePresetDecideBtn.innerHTML = "決定！";
-    cachePresetDecideBtn.style.height = "22px";
-    cachePresetDecideBtn.style.fontSize = "12px";
-    cachePresetDecideBtn.onclick = function () {
-      decideFunction(idx + 1);
-    };
-    cachePreset.appendChild(cachePresetDecideBtn);
-    presetArea.appendChild(cachePreset);
-  });
+  const cachePresetDecideBtn = document.createElement("button");
+  cachePresetDecideBtn.innerHTML = "決定！";
+  cachePresetDecideBtn.style.height = "22px";
+  cachePresetDecideBtn.style.fontSize = "12px";
+  cachePresetDecideBtn.onclick = function () {
+    decideFunction(idx + 1);
+  };
+  cachePreset.appendChild(cachePresetDecideBtn);
+  presetArea.appendChild(cachePreset);
+});
 //================================================
 //プリセット一覧を表示
 const showPresetTitle = document.createElement("h3");
@@ -188,8 +225,26 @@ showPresetTitle.style.cssText = `
     margin:20px 0;
 `;
 presetArea.appendChild(showPresetTitle);
+//===========================
+//プルダウンの下にボタンを配置
+let availableButtonCounter = 0;
+function addPresetButton() {
+  // console.log(getAvailablePullDownProject);
+  getAvailablePullDownProject.map((g, idx) => {
+    // console.log("run!");
+    // console.log(createPresetButton());
+    // if (getAvailablePullDownProject.length - 1 <= idx) {
+    // console.log(getAvailablePullDownProject.length);
+    if (availableButtonCounter <= idx) {
+      console.log(availableButtonCounter);
+      g.after(createPresetButton(availableButtonCounter));
+      ++availableButtonCounter;
+    }
+
+    // console.log(availableButtonCounter);
+  });
+}
 chrome.storage.sync.get(null, (data) => {
-  let dataPresetList = [];
   dataPresetList.push(data.preset1[0]);
   dataPresetList.push(data.preset2[0]);
   dataPresetList.push(data.preset3[0]);
@@ -208,10 +263,15 @@ chrome.storage.sync.get(null, (data) => {
     presetResultUnitWrap.appendChild(presetResultUnitTitle);
     presetArea.appendChild(presetResultUnitWrap);
   });
-  console.log(dataPresetList);
+  // console.log(dataPresetList);
 
+  addPresetButton();
+
+  //===========================
   // const presetListTitle = document.createElement("div");
 });
+//================================================
+
 //================================================
 function reflashResultPresets(num) {}
 function formatPreset(num) {
@@ -250,16 +310,16 @@ function formatPreset(num) {
   };
 }
 function decideFunction(num) {
-  console.log(`${num}がおされたよ！`);
+  // console.log(`${num}がおされたよ！`);
   formatPreset(num);
 
   // let presetResult;
   // formatPreset(num);
 
-  console.log(presetResult);
+  // console.log(presetResult);
   chrome.storage.sync.set(presetResult);
   chrome.storage.sync.get(null, (data) => {
-    console.log(data);
+    // console.log(data);
   });
   // chrome.storage.sync.set({
   //   preset2: [{ no: 1, name: jobZentai000.innerHTML, color: "#ffffff" }],
@@ -297,10 +357,10 @@ document.body.appendChild(presetArea);
 //================================================
 
 // 時間入力欄を表示するように
-document.getElementById("time_span_element_1").style.display = "table-cell";
+// document.getElementById("time_span_element_1").style.display = "table-cell";
 
-const jobZentai000 = document.getElementById("supplemental_working_record_setting_1")
-  .children[1];
+// const jobZentai000 = document.getElementById("supplemental_working_record_setting_1")
+//   .children[1];
 // chrome.storage.sync.set({
 //   preset1: [{ no: 0, name: jobZentai000.innerHTML, color: "#ffffff" }],
 // });
@@ -308,26 +368,26 @@ const jobZentai000 = document.getElementById("supplemental_working_record_settin
 //   preset2: [{ no: 1, name: jobZentai000.innerHTML, color: "#ffffff" }],
 // });
 chrome.storage.sync.get(null, (data) => {
-  console.log(data);
+  // console.log(data);
 });
 
 //test
 // console.log(getProject);
-document.getElementById("supplemental_working_record_setting_1").selectedIndex = 6;
+// document.getElementById("supplemental_working_record_setting_1").selectedIndex = 6;
 // console.log();
 
-function selectProject() {
-  let selectProjectDom;
-  getProject[0].selectedIndex = 7;
-}
-selectProject();
+// function selectProject() {
+//   let selectProjectDom;
+//   getProject[0].selectedIndex = 7;
+// }
+// selectProject();
 
 // console.log(Array.from(getProject).);
 // console.log(document.getElementById("supplemental_working_record_setting_1").children);
 
 //項目追加ボタンを押した時の挙動
-addSectionButton.onclick = function () {
-  console.log("addSectionButton");
-};
+// addSectionButton.onclick = function () {
+//   console.log("addSectionButton");
+// };
 
 // fetch("https://api.kingtime.jp/v1.0/tokens/XXXXXXXXXXXXXXXXXX");
