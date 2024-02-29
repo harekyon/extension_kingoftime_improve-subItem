@@ -29,6 +29,14 @@ presetEditButton.classList.add("preset-edit__button");
 presetEditButton.innerText = "Edit Preset";
 presetArea.appendChild(presetEditButton);
 
+presetEditButton.onclick = function () {
+  if (document.getElementById("presetArea").style.right === "0px") {
+    document.getElementById("presetArea").style.right = "-580px";
+  } else {
+    document.getElementById("presetArea").style.right = "0px";
+  }
+};
+
 //getAvailablePullDownProject:有効なselectタグを格納する変数
 let getAvailablePullDownProject = [];
 //emptyNumber:項目追加した時に[内容]列が空白になるので、emptyNumberを使って空白の行数を特定する
@@ -215,40 +223,42 @@ function reWriteResultUnitTitle(no, jobName, anyname) {
   reWriteResult.innerText = text;
 }
 
-chrome.storage.sync.get(null, (data) => {
-  dataPresetList.push(data?.preset1[0]);
-  dataPresetList.push(data?.preset2[0]);
-  dataPresetList.push(data?.preset3[0]);
-  dataPresetList.push(data?.preset4[0]);
-  dataPresetList.push(data?.preset5[0]);
-  dataPresetList.map((d, idx) => {
-    const presetResultUnitWrap = document.createElement("div");
-    // presetResultUnitWrap.style.cssText = `
-    //   display:flex;
-    //   flex-direction:row;
-    //   background:yellow;
-    // `;
-    presetResultUnitWrap;
-    const presetResultUnitText = document.createElement("p");
-    let cacheJobName = d.jobName;
-    // console.log(d.no);
-    // console.log(cacheJobName);
-    presetResultUnitText.style.fontSize = "10px";
-    // presetResultUnitText.innerText = `Preset${d.no}: ${cacheJobName}, 登録名:${d.anyname}`;
-    // let text = `Preset${d.no}: ${cacheJobName}, 登録名:${d.anyname}`;
-    let text = `Preset${String(d.no)}: 登録名: ${d.anyname}, 案件名: ${d.jobName}`;
-    text = text.replace(/\n/g, "");
-    // console.log(text);
-    presetResultUnitText.innerText = text;
-    presetResultUnitText.id = `presetResultUnitText${d.no}`;
-    presetResultUnitText.classList.add("applied__presetWrap");
-    presetResultUnitWrap.appendChild(presetResultUnitText);
-    presetArea.appendChild(presetResultUnitWrap);
+setTimeout(() => {
+  chrome.storage.sync.get(null, (data) => {
+    dataPresetList.push(data?.preset1[0]);
+    dataPresetList.push(data?.preset2[0]);
+    dataPresetList.push(data?.preset3[0]);
+    dataPresetList.push(data?.preset4[0]);
+    dataPresetList.push(data?.preset5[0]);
+    dataPresetList.map((d, idx) => {
+      const presetResultUnitWrap = document.createElement("div");
+      // presetResultUnitWrap.style.cssText = `
+      //   display:flex;
+      //   flex-direction:row;
+      //   background:yellow;
+      // `;
+      presetResultUnitWrap;
+      const presetResultUnitText = document.createElement("p");
+      let cacheJobName = d.jobName;
+      // console.log(d.no);
+      // console.log(cacheJobName);
+      presetResultUnitText.style.fontSize = "10px";
+      // presetResultUnitText.innerText = `Preset${d.no}: ${cacheJobName}, 登録名:${d.anyname}`;
+      // let text = `Preset${d.no}: ${cacheJobName}, 登録名:${d.anyname}`;
+      let text = `Preset${String(d.no)}: 登録名: ${d.anyname}, 案件名: ${d.jobName}`;
+      text = text.replace(/\n/g, "");
+      // console.log(text);
+      presetResultUnitText.innerText = text;
+      presetResultUnitText.id = `presetResultUnitText${d.no}`;
+      presetResultUnitText.classList.add("applied__presetWrap");
+      presetResultUnitWrap.appendChild(presetResultUnitText);
+      presetArea.appendChild(presetResultUnitWrap);
+    });
+    addPresetButton();
   });
-  addPresetButton();
-});
+}, 300);
+
 //================================================
-// chrome.storage.sync.clear();
 
 //================================================
 function formatPreset(num) {
@@ -276,6 +286,7 @@ function decideFunction(num) {
   formatPreset(num);
   chrome.storage.sync.set(presetResult);
 }
+
 //================================================
 //プリセット入力エリアに保存されているデータを表示
 function applyPresetInputField() {
@@ -298,6 +309,31 @@ function applyPresetInputField() {
   });
 }
 applyPresetInputField();
+
+const deleteButton = document.createElement("button");
+deleteButton.id = "deleteButton";
+deleteButton.classList.add("preset-delete__button");
+deleteButton.innerText = "Delete All Preset";
+deleteButton.onclick = function () {
+  if (confirm("プリセットを削除するカ？ ※OKを押すとページがリロードされます")) {
+    console.log("プリセットを全て削除しました");
+    if (confirm("本当にプリセットを削除するカ？ 本当に良いか？")) {
+      deletePreset();
+      setTimeout(() => {
+        window.location.reload();
+      }, 300);
+    } else {
+      console.log("あっぶねぇ...削除をキャンセルしました");
+    }
+  } else {
+    console.log("削除をキャンセルしました");
+  }
+};
+presetArea.appendChild(deleteButton);
+function deletePreset() {
+  chrome.storage.sync.clear();
+  // window.
+}
 
 document.body.appendChild(presetArea);
 

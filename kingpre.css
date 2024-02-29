@@ -35,7 +35,7 @@
   position: fixed;
   z-index: 10000;
   top: 45px;
-  right: 0px;
+  right: -580px;
   background: #1f1f1f;
   padding: 30px 10px 30px 20px;
   transition: 0.6s;
@@ -103,4 +103,9 @@
   br {
     display: none;
   }
+}
+
+.preset-delete__button {
+  position: absolute;
+  bottom: 20px;
 }
