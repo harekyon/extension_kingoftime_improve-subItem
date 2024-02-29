@@ -17,40 +17,16 @@ let dataPresetList = [];
 // プリセット画面追加
 const presetArea = document.createElement("div");
 presetArea.id = "presetArea";
-presetArea.style.cssText = `
-    width:550px;
-    height:70vh;
-    position:fixed;
-    z-index:10000;
-    top:45px;
-    right:0px;
-    background:red;
-    padding:20px 10px;
-    transition:0.6s;
-`;
+presetArea.classList.add("preset--wrap");
 const presetAreaTitle = document.createElement("h3");
 presetAreaTitle.id = "presetArea";
 presetAreaTitle.innerText = "案件プリセット登録";
-presetAreaTitle.style.cssText = `
-    font-size:20px;
-    font-weight:700;
-    margin-bottom:10px;
-`;
+presetAreaTitle.classList.add("preset__areaTitle");
 presetArea.appendChild(presetAreaTitle);
 const presetEditButton = document.createElement("button");
 presetEditButton.id = "presetEditButton";
+presetEditButton.classList.add("preset-edit__button");
 presetEditButton.innerText = "Edit Preset";
-presetEditButton.style.cssText = `
-    font-size:14px;
-    font-weight:700;
-    margin-bottom:10px;
-    -ms-writing-mode: tb-rl;
-  writing-mode: vertical-rl;
-  position:absolute;
-  left:-27px;
-  top:0;
-  background:blue;
-`;
 presetArea.appendChild(presetEditButton);
 
 //getAvailablePullDownProject:有効なselectタグを格納する変数
@@ -78,9 +54,9 @@ function createPresetButton(num) {
         font-size:10px;
       `;
     buttonUnit.onclick = function () {
-      console.log("run!");
-      console.log(p.value);
-      console.log(getAvailablePullDownProject[num].value);
+      // console.log("run!");
+      // console.log(p.value);
+      // console.log(getAvailablePullDownProject[num].value);
       getAvailablePullDownProject[num].value = p.value;
     };
     buttonWrap.appendChild(buttonUnit);
@@ -105,6 +81,39 @@ function checkEmptyProjectId() {
   });
 }
 
+//init
+for (let i = 1; i <= 5; i++) {
+  const unit = document.getElementById(`preset${i}AnyName`);
+}
+let initManage = [0, 0, 0, 0, 0];
+
+chrome.storage.sync.get(null, (data) => {
+  // console.log(getAvailablePullDownProject[0]);
+  // console.log(data);
+  Object.keys(data).map((d, idx) => {
+    // console.log(data[d][0].no);
+    initManage[data[d][0].no - 1] = 1;
+  });
+  // console.log(initManage);
+  initManage.map((i, idx) => {
+    if (i === 0) {
+      chrome.storage.sync.set({
+        [`preset${idx + 1}`]: [
+          {
+            no: idx + 1,
+            value: getAvailablePullDownProject[0].value,
+            anyname: "null",
+            jobName: "全体",
+            color: "#ffffff",
+          },
+        ],
+      });
+    }
+    if (i === 0) {
+    }
+  });
+});
+
 //ページ訪問時に有効なselectタグをチェックする関数を一度実行
 checkProjectId();
 checkEmptyProjectId();
@@ -112,7 +121,7 @@ checkEmptyProjectId();
 addSectionButton.onclick = function () {
   checkEmptyProjectId();
   addPresetButton();
-  console.log("run!");
+  // console.log("run!");
 }; //補助項目追加ボタンを押した時に有効なselectタグをチェックする関数を実行
 //================================================
 //プリセットの設定
@@ -140,40 +149,28 @@ for (let i = 1; i <= 5; i++) {
 //プリセットを生成
 presetDataList.map((u, idx) => {
   let cachePreset = u.presetSecEleType.dom;
-  cachePreset.style.marginBottom = "4px";
-  cachePreset.style.display = "flex";
-  cachePreset.style.justifyContent = "flex-start";
-  cachePreset.style.alignItems = "center";
-  cachePreset.style.flexDirection = "row";
-  cachePreset.style.columnGap = "3px";
+  cachePreset.classList.add("preset__unitWrap");
   //sectionTitle
   let cachePresetTitle = u.presetSecTitle.dom;
   cachePresetTitle.innerText = u.presetSecTitle.text;
-  cachePresetTitle.style.display = "inline-block";
-  cachePresetTitle.style.fontSize = "14px";
-  cachePresetTitle.style.fontWeight = "700";
-  cachePresetTitle.style.marginRight = "4px";
+  cachePresetTitle.classList.add("preset__unitTitle");
   cachePreset.appendChild(cachePresetTitle);
 
   let chachePresetJobList = u.presetUnitJob.dom;
   chachePresetJobList.id = u.presetUnitJob.id;
   chachePresetJobList.name = u.presetUnitJob.name;
-  chachePresetJobList.style.height = "20px";
-  chachePresetJobList.style.padding = "2px 32px 2px 5px";
-  chachePresetJobList.style.fontSize = "10px";
+  chachePresetJobList.classList.add("preset__unitJob");
   cachePreset.appendChild(chachePresetJobList);
 
   let chachePresetAnyName = u.presetUnitAnyName.dom;
   chachePresetAnyName.placeholder = `任意のタイトル${idx + 1}`;
-  chachePresetAnyName.style.height = "18px";
-  chachePresetAnyName.style.fontSize = "10px";
   chachePresetAnyName.id = `preset${idx + 1}AnyName`;
+  chachePresetAnyName.classList.add("preset__unitAnyname");
   cachePreset.appendChild(chachePresetAnyName);
 
   const cachePresetDecideBtn = document.createElement("button");
   cachePresetDecideBtn.innerHTML = "決定！";
-  cachePresetDecideBtn.style.height = "22px";
-  cachePresetDecideBtn.style.fontSize = "12px";
+  cachePresetDecideBtn.classList.add("preset__unitDecide");
   cachePresetDecideBtn.onclick = function () {
     decideFunction(idx + 1);
     console.log(document.getElementById(`preset${idx + 1}Job`));
@@ -193,12 +190,8 @@ presetDataList.map((u, idx) => {
 //プリセット一覧を表示
 const showPresetTitle = document.createElement("h3");
 showPresetTitle.id = "showPresetTitle";
-showPresetTitle.innerText = "登録されている案件プリセット一覧";
-showPresetTitle.style.cssText = `
-    font-size:20px;
-    font-weight:700;
-    margin:20px 0;
-`;
+showPresetTitle.innerText = "登録済みの案件プリセット一覧";
+showPresetTitle.classList.add("applied__areaTitle");
 presetArea.appendChild(showPresetTitle);
 //===========================
 //プルダウンの下にボタンを配置
@@ -206,40 +199,56 @@ let availableButtonCounter = 0;
 function addPresetButton() {
   getAvailablePullDownProject.map((g, idx) => {
     if (availableButtonCounter <= idx) {
-      console.log(availableButtonCounter);
+      // console.log(availableButtonCounter);
       g.after(createPresetButton(availableButtonCounter));
       ++availableButtonCounter;
     }
   });
 }
 function reWriteResultUnitTitle(no, jobName, anyname) {
-  console.log("run!");
-  const reWriteResult = document.getElementById(`presetResultUnitTitle${no}`);
-  reWriteResult.innerText = `Preset${no}: ${jobName}, 登録名${anyname}`;
+  // console.log("run!");
+  const reWriteResult = document.getElementById(`presetResultUnitText${no}`);
+  // console.log(jobName);
+  let text = `Preset${String(no)}: 登録名: ${anyname}, 案件名: ${jobName}`;
+  text = text.replace(/\n/g, "");
+  // console.log(text);
+  reWriteResult.innerText = text;
 }
+
 chrome.storage.sync.get(null, (data) => {
-  dataPresetList.push(data.preset1[0]);
-  dataPresetList.push(data.preset2[0]);
-  dataPresetList.push(data.preset3[0]);
-  dataPresetList.push(data.preset4[0]);
-  dataPresetList.push(data.preset5[0]);
+  dataPresetList.push(data?.preset1[0]);
+  dataPresetList.push(data?.preset2[0]);
+  dataPresetList.push(data?.preset3[0]);
+  dataPresetList.push(data?.preset4[0]);
+  dataPresetList.push(data?.preset5[0]);
   dataPresetList.map((d, idx) => {
     const presetResultUnitWrap = document.createElement("div");
-    presetResultUnitWrap.style.cssText = `
-      display:flex;
-      flex-direction:row;
-      background:yellow;
-    `;
-    const presetResultUnitTitle = document.createElement("p");
-    presetResultUnitTitle.style.fontSize = "10px";
-    presetResultUnitTitle.innerText = `Preset${d.no}: ${d.jobName}, 登録名${d.anyname}`;
-    presetResultUnitTitle.id = `presetResultUnitTitle${d.no}`;
-    presetResultUnitWrap.appendChild(presetResultUnitTitle);
+    // presetResultUnitWrap.style.cssText = `
+    //   display:flex;
+    //   flex-direction:row;
+    //   background:yellow;
+    // `;
+    presetResultUnitWrap;
+    const presetResultUnitText = document.createElement("p");
+    let cacheJobName = d.jobName;
+    // console.log(d.no);
+    // console.log(cacheJobName);
+    presetResultUnitText.style.fontSize = "10px";
+    // presetResultUnitText.innerText = `Preset${d.no}: ${cacheJobName}, 登録名:${d.anyname}`;
+    // let text = `Preset${d.no}: ${cacheJobName}, 登録名:${d.anyname}`;
+    let text = `Preset${String(d.no)}: 登録名: ${d.anyname}, 案件名: ${d.jobName}`;
+    text = text.replace(/\n/g, "");
+    // console.log(text);
+    presetResultUnitText.innerText = text;
+    presetResultUnitText.id = `presetResultUnitText${d.no}`;
+    presetResultUnitText.classList.add("applied__presetWrap");
+    presetResultUnitWrap.appendChild(presetResultUnitText);
     presetArea.appendChild(presetResultUnitWrap);
   });
   addPresetButton();
 });
 //================================================
+// chrome.storage.sync.clear();
 
 //================================================
 function formatPreset(num) {
@@ -270,7 +279,7 @@ function decideFunction(num) {
 //================================================
 //プリセット入力エリアに保存されているデータを表示
 function applyPresetInputField() {
-  console.log(presetDataList);
+  // console.log(presetDataList);
   chrome.storage.sync.get(null, (data) => {
     // console.log(data);
     Object.keys(data).map((d, idx) => {
