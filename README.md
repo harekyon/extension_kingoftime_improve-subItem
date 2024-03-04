@@ -5,6 +5,7 @@
 ![load extension](https://i.gyazo.com/c6624d69456ccd68cdbd4420cf5107bc.png)
 ### フォルダを選択する
 中のデータを選択するのではなくフォルダを選択します。これで導入は完了じゃ！
+※解凍してね！
 ![select extension folder](https://i.gyazo.com/bd6d21b40d1d0db1c92311077f9d7d5c.png)
 
 ## 使い方
