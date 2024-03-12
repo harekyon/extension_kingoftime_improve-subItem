@@ -62,9 +62,6 @@ function createPresetButton(num) {
         font-size:10px;
       `;
     buttonUnit.onclick = function () {
-      // console.log("run!");
-      // console.log(p.value);
-      // console.log(getAvailablePullDownProject[num].value);
       getAvailablePullDownProject[num].value = p.value;
     };
     buttonWrap.appendChild(buttonUnit);
@@ -96,13 +93,9 @@ for (let i = 1; i <= 5; i++) {
 let initManage = [0, 0, 0, 0, 0];
 
 chrome.storage.sync.get(null, (data) => {
-  // console.log(getAvailablePullDownProject[0]);
-  // console.log(data);
   Object.keys(data).map((d, idx) => {
-    // console.log(data[d][0].no);
     initManage[data[d][0].no - 1] = 1;
   });
-  // console.log(initManage);
   initManage.map((i, idx) => {
     if (i === 0) {
       chrome.storage.sync.set({
