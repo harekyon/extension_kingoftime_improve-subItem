@@ -61,6 +61,7 @@ function createPresetButton(num) {
     buttonUnit.style.cssText = `
         font-size:10px;
       `;
+    buttonUnit.tabIndex = "-1";
     buttonUnit.onclick = function () {
       getAvailablePullDownProject[num].value = p.value;
     };
