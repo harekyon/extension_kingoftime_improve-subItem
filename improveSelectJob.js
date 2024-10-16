@@ -13,7 +13,7 @@ const addSectionButton = document.getElementById("supplemental_working_record_ad
 const selectInput1 = document.getElementById("supplemental_working_record_setting_1");
 //プリセットのリスト
 let dataPresetList = [];
-const totalItems = 7;
+const totalItems = 8;
 
 // プリセット画面追加
 const presetArea = document.createElement("div");
@@ -86,10 +86,10 @@ function checkEmptyProjectId() {
 }
 
 //init
+let initManage = [];
 for (let i = 1; i <= totalItems; i++) {
-  const unit = document.getElementById(`preset${i}AnyName`);
+  initManage.push(0);
 }
-let initManage = [0, 0, 0, 0, 0];
 
 chrome.storage.sync.get(null, (data) => {
   Object.keys(data).map((d, idx) => {
