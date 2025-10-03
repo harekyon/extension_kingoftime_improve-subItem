@@ -62,11 +62,13 @@ function createTimeButton(num) {
         const eigenvalue = inputTimeElement[num].id.substring(startTimeText.length);
         let selectDayElement = document.getElementById(`start_time_day_${eigenvalue}`);
         judgeNextDay(selectDayElement, f);
+        startTimeDetailsAutoInput(eigenvalue, f);
       }
       if (inputTimeElement[num].id.includes(endTimeText)) {
         const eigenvalue = inputTimeElement[num].id.substring(endTimeText.length);
         let selectDayElement = document.getElementById(`end_time_day_${eigenvalue}`);
         judgeNextDay(selectDayElement, f);
+        endTimeDetailsAutoInput(eigenvalue, f);
       }
     };
   });
@@ -89,6 +91,22 @@ function judgeNextDay(selectDayElement, f) {
       }
     });
   }
+}
+function startTimeDetailsAutoInput(eigenvalue, time) {
+  document.getElementById(
+    `start_time_supplemental_working_record_hour_${eigenvalue}`
+  ).value = time.substring(0, 2);
+  document.getElementById(
+    `start_time_supplemental_working_record_minute_${eigenvalue}`
+  ).value = time.substring(time.indexOf(":") + 1, time.indexOf(":") + 3);
+}
+function endTimeDetailsAutoInput(eigenvalue, time) {
+  document.getElementById(
+    `end_time_supplemental_working_record_hour_${eigenvalue}`
+  ).value = time.substring(0, 2);
+  document.getElementById(
+    `end_time_supplemental_working_record_minute_${eigenvalue}`
+  ).value = time.substring(time.indexOf(":") + 1, time.indexOf(":") + 3);
 }
 
 getInputElement();

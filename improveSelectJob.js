@@ -13,6 +13,7 @@ const addSectionButton = document.getElementById("supplemental_working_record_ad
 const selectInput1 = document.getElementById("supplemental_working_record_setting_1");
 //プリセットのリスト
 let dataPresetList = [];
+const totalItems = 8;
 
 // プリセット画面追加
 const presetArea = document.createElement("div");
@@ -72,14 +73,11 @@ function createPresetButton(num) {
 function checkEmptyProjectId() {
   Array.from(document.getElementsByTagName("select")).map((s) => {
     for (let n = 1; n <= emptyNumber + 1; n++) {
-      if (
-        s.id.match(new RegExp(`^supplemental_working_record_setting_${emptyNumber}$`))
-      ) {
+      if (s.id.match(new RegExp(`^supplemental_working_record_setting_${emptyNumber}$`))) {
         // console.log(s.id);
         getAvailablePullDownProject.push(s);
         document.getElementById(`empty_element_${emptyNumber}`).style.display = "none";
-        document.getElementById(`time_span_element_${emptyNumber}`).style.display =
-          "table-cell";
+        document.getElementById(`time_span_element_${emptyNumber}`).style.display = "table-cell";
         createPresetButton(getAvailablePullDownProject.length);
         ++emptyNumber;
       }
@@ -88,10 +86,10 @@ function checkEmptyProjectId() {
 }
 
 //init
-for (let i = 1; i <= 5; i++) {
-  const unit = document.getElementById(`preset${i}AnyName`);
+let initManage = [];
+for (let i = 1; i <= totalItems; i++) {
+  initManage.push(0);
 }
-let initManage = [0, 0, 0, 0, 0];
 
 chrome.storage.sync.get(null, (data) => {
   Object.keys(data).map((d, idx) => {
@@ -128,7 +126,7 @@ addSectionButton.onclick = function () {
 //================================================
 //プリセットの設定
 const presetDataList = [];
-for (let i = 1; i <= 5; i++) {
+for (let i = 1; i <= totalItems; i++) {
   //
   presetDataList.push({
     presetSecTitle: { dom: document.createElement("h4"), text: `Preset${i}` },
@@ -219,11 +217,14 @@ function reWriteResultUnitTitle(no, jobName, anyname) {
 
 setTimeout(() => {
   chrome.storage.sync.get(null, (data) => {
-    dataPresetList.push(data?.preset1[0]);
-    dataPresetList.push(data?.preset2[0]);
-    dataPresetList.push(data?.preset3[0]);
-    dataPresetList.push(data?.preset4[0]);
-    dataPresetList.push(data?.preset5[0]);
+    for (let i = 1; i <= totalItems; i++) {
+      dataPresetList.push(data["preset" + i][0]);
+    }
+    // dataPresetList.push(data?.preset1[0]);
+    // dataPresetList.push(data?.preset2[0]);
+    // dataPresetList.push(data?.preset3[0]);
+    // dataPresetList.push(data?.preset4[0]);
+    // dataPresetList.push(data?.preset5[0]);
     dataPresetList.map((d, idx) => {
       const presetResultUnitWrap = document.createElement("div");
       // presetResultUnitWrap.style.cssText = `
@@ -292,8 +293,7 @@ function applyPresetInputField() {
       // console.log(data[d][0]?.value);
       if (data[d][0]?.value !== undefined) {
         document.getElementById(`preset${data[d][0].no}Job`).value = data[d][0]?.value;
-        document.getElementById(`preset${data[d][0].no}AnyName`).value =
-          data[d][0]?.anyname;
+        document.getElementById(`preset${data[d][0].no}AnyName`).value = data[d][0]?.anyname;
       }
 
       // preset1AnyName;

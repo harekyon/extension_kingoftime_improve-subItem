@@ -4,7 +4,7 @@
   "version": "1.0.2",
   "description": "King Of Time 補助項目入力 効率化ツール",
   "permissions": [
-    "background", "scripting", "tabs", "storage"
+    "background", "scripting", "tabs"
   ],
   "host_permissions": [
     "*://api.kingtime.jp/*"
@@ -15,8 +15,8 @@
   "content_scripts": [
     {
       "matches": ["https://s2.ta.kingoftime.jp/admin/*"],
-      "css": ["improveSelectJob.css", "./work-time-visualizer/work-time-visualizer.css"],
-      "js": ["improveSelectJob.js", "improveInputTime.js", "events.js", "contents.js", "./work-time-visualizer/work-time-visualizer.js"]
+      "css": ["improveSelectJob.css"],
+      "js": ["improveSelectJob.js", "improveInputTime.js", "events.js", "contents.js"]
     }
   ]
 }

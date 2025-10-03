@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "KingOfTime extension",
+  "version": "1.0.2",
+  "description": "King Of Time 補助項目入力 効率化ツール",
+  "permissions": ["storage"],
+  "type": "module",
+  "content_scripts": [
+    {
+      "matches": ["https://s2.ta.kingoftime.jp/admin/*"],
+      "css": ["improveSelectJob.css"],
+      "js": ["improveSelectJob.js", "improveInputTime.js", "events.js"]
+    }
+  ]
+}

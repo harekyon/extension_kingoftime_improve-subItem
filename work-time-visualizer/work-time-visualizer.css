@@ -1,0 +1,324 @@
+#work-time-visualizer .work-time-visualizer__details {
+    display: grid;
+    /* grid-template-columns: repeat(6, 1fr); */
+    grid-template-columns: repeat(7, minmax(0px, 90px));
+    /* gap: 8px 12px; */
+    margin: 8px 0 12px;
+}
+
+#work-time-visualizer .wtv-detail__item {
+    display: flex;
+    flex-direction: column;
+    
+}
+
+#work-time-visualizer .wtv-detail__label {
+    background: #99999922;
+    color: #666;
+    font-size: 12px;
+    padding: 2px 0;
+}
+
+#work-time-visualizer .wtv-detail__item--perday .wtv-detail__label,
+#work-time-visualizer .wtv-detail__item--perday .wtv-detail__value {
+    font-weight: bold;
+}
+
+#work-time-visualizer .wtv-detail__value {
+    font-size: 12px;
+    font-weight:bold;
+    
+    font-variant-numeric: tabular-nums;
+}
+/* Work Time Visualizer */
+#work-time-visualizer .work-time-visualizer-container {
+    width:774px;
+    margin: 12px 0;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #fff;
+}
+
+#work-time-visualizer .work-time-visualizer__header {
+    font-weight: 600;
+    /* margin-bottom: 48px; */
+}
+
+#work-time-visualizer .work-time-visualizer__summary {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 10px;
+}
+
+#work-time-visualizer .metric .label {
+    color: #666;
+    margin-right: 6px;
+}
+
+#work-time-visualizer .metric .value {
+    font-variant-numeric: tabular-nums;
+}
+
+#work-time-visualizer .wtv-bars {
+    height:110px;
+    display: grid;
+    gap: 8px;
+    /* margin-bottom:28px; */
+}
+
+#work-time-visualizer .wtv-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#work-time-visualizer .wtv-bar-row__label {
+    width: 48px;
+    color: #555;
+    font-size: 12px;
+    text-align: right;
+}
+
+#work-time-visualizer .wtv-bar-track {
+    width: 300px;
+    height: 12px;
+    background: #eee;
+    border-radius: 6px;
+    /* overflow: hidden; */
+    position: relative;
+}
+
+#work-time-visualizer .wtv-bar {
+    height: 100%;
+    border-radius: 6px;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+#work-time-visualizer .wtv-bar--required {
+    background: #e3eadf;
+    z-index: 1;
+}
+
+#work-time-visualizer .wtv-bar--actual {
+    background: #4caf50;
+    z-index: 2;
+}
+
+#work-time-visualizer .wtv-bar--overflow {
+    background: #ff9800;
+    z-index: 3;
+}
+
+#work-time-visualizer .wtv-bar--overflow-80 {
+    background: #f44336;
+    z-index: 4;
+    position: absolute;
+    top: 0;
+    height: 12px;
+    border-radius: 0 6px 6px 0;
+}
+
+#work-time-visualizer .wtv-bg {
+    position: absolute;
+    top: 0;
+    height: 12px;
+    z-index: 0;
+}
+
+#work-time-visualizer .wtv-bg--ot45 {
+    background: #fff1d6;
+}
+
+#work-time-visualizer .wtv-bg--ot80 {
+    background: #fbe8e8;
+}
+
+#work-time-visualizer .wtv-bg--bp20 {
+    background: #e9e5f2; /* 黒紫の淡い背景 */
+    z-index: 0;
+}
+
+#work-time-visualizer .wtv-line {
+    position: absolute;
+    height: 2px;
+    bottom: -2px;
+}
+
+#work-time-visualizer .wtv-line--overflow-20 {
+    background: #3f1d72; /* 黒紫 */
+    z-index: 5; /* 背景より上に表示 */
+    position: absolute;
+    top: 0;
+    height: 12px; /* バーと同じ高さに */
+    border-radius: 0 6px 6px 0;
+}
+
+#work-time-visualizer .wtv-guides {
+    position: absolute;
+    inset: 0;
+}
+
+#work-time-visualizer .wtv-guide {
+    position: absolute;
+    top: -18px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+#work-time-visualizer .wtv-guide__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+#work-time-visualizer .wtv-guide--required {
+    background: #4caf50;
+}
+
+#work-time-visualizer .wtv-guide--actual {
+    background: #ff9800;
+}
+
+#work-time-visualizer .wtv-guide__label {
+    font-size: 11px;
+    color: #666;
+}
+
+#work-time-visualizer .wtv-values {
+    display: flex;
+    gap: 16px;
+}
+
+#work-time-visualizer .wtv-guide-label {
+    position: absolute;
+    top: -18px;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: #333;
+    white-space: nowrap;
+}
+
+#work-time-visualizer .wtv-value-label {
+    position: absolute;
+    top: 12px;
+    transform: translateX(-50%);
+    font-size: 9px;
+    color: #33333333;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+#work-time-visualizer .wtv-right-metric {
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* オーバーフローをトラック右端から外へ伸ばすために絶対配置 */
+#work-time-visualizer .wtv-bar--overflow {
+    position: absolute;
+    top: 0;
+    height: 12px;
+    border-radius: 0 6px 6px 0;
+}
+
+#work-time-visualizer .wtv-actual-label {
+    position: absolute;
+    top: -18px;
+    transform: translateX(0);
+    font-size: 12px;
+    color: #333;
+    white-space: nowrap;
+}
+
+#work-time-visualizer .wtv-sep-top {
+    position: absolute;
+    /* top: -20px; */
+    /* top: -6px; */
+    top: -8px;
+    width: 1px;
+    /* height: 18px; */
+    height: 20px;
+    /* height: 20px; */
+    background: #33333333;
+}
+
+#work-time-visualizer .wtv-top-label {
+    position: absolute;
+    top: -38px;
+    transform: translateX(-50%);
+    font-size: 11px;
+    line-height: 1.2;
+    color: #333;
+    text-align: center;
+    white-space: nowrap;
+}
+
+#work-time-visualizer .wtv-top-label__title {
+    font-size: 10px;
+    color: #666;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -3px;
+    
+}
+
+#work-time-visualizer .wtv-top-label__value {
+    font-size: 14px;
+    color: #333;
+    font-variant-numeric: tabular-nums;
+    /* padding: 4px 8px; */
+    /* border-radius: 10px; */
+    /* background: red; */
+    padding: 4px 8px;
+    border-radius: 10px;
+    color: black;
+    font-size: 12px;
+    filter: drop-shadow(0px 0px 4px #33333355);
+}
+
+#work-time-visualizer .wtv-top-label__valueText{
+    filter: drop-shadow(0 0 4px white);
+    font-weight: 600;
+}
+
+#work-time-visualizer .wtv-sep {
+    position: absolute;
+    bottom: -15px;
+    width: 1px;
+    height: 15px;
+    background: #33333333;
+}
+
+#work-time-visualizer .wtv-sep-value {
+    position: absolute;
+    bottom: -34px;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: #333;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+#work-time-visualizer .wtv-bg-label {
+    position: absolute;
+    bottom: -22px;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: #666;
+    white-space: nowrap;
+}
+
+#work-time-visualizer .wtv-bar-track {
+    position: relative;
+    display: flex;
+}
+
